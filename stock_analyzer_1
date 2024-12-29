@@ -4,8 +4,8 @@ STOCK_NAME = 'TSLA'
 COMPANY_NAME = "Tesla Inc"
 STOCK_KEY_API = "9G5FQQAD3PU9I6YR"
 STOCK_ENDPOINT = 'https://www.alphavantage.co/query'
-TWILIO_SID = "ACfda8343b154009218062d4a956191a28"
-TWILIO_AUTH = "482a196fdcd0d13200bf8cf8c0b41f7e"
+TWILIO_SID = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+TWILIO_AUTH = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 stock_params = {
     'function':"TIME_SERIES_DAILY",
@@ -52,8 +52,8 @@ client = Client(account_sid, auth_token)
 # Send the SMS
 message = client.messages.create(
     body=f'Hello there is a Tesla Stock news. The stock price difference between is {percentage_difference}',  # Message content
-    from_='+12314327312',  # Your Twilio phone number (must be in E.164 format)
-    to='+14389310083'  # The recipient's phone number (also in E.164 format)
+    from_='XXXXXXXXXXXXX',  # Your Twilio phone number (must be in E.164 format)
+    to='XXXXXXXXXXXXX'  # The recipient's phone number (also in E.164 format)
 )
 
 # Print the message SID to confirm it's been sent
