@@ -1,0 +1,60 @@
+import requests
+from twilio.rest import Client
+STOCK_NAME = 'TSLA'
+COMPANY_NAME = "Tesla Inc"
+STOCK_KEY_API = "9G5FQQAD3PU9I6YR"
+STOCK_ENDPOINT = 'https://www.alphavantage.co/query'
+TWILIO_SID = "ACfda8343b154009218062d4a956191a28"
+TWILIO_AUTH = "482a196fdcd0d13200bf8cf8c0b41f7e"
+
+stock_params = {
+    'function':"TIME_SERIES_DAILY",
+    'symbol': STOCK_NAME,
+    'apikey':STOCK_KEY_API,
+}
+
+
+response = requests.get(STOCK_ENDPOINT, params=stock_params)
+data = response.json()['Time Series (Daily)']
+print(data)
+
+
+data_list= [value for (key, value) in data.items()]
+yesterday_data = data_list[0]
+yesterday_data_closing = yesterday_data["4. close"]
+print(yesterday_data_closing)
+day_before_yesterday = data_list[1]
+day_before_yesterday_closing = day_before_yesterday["4. close"]
+print(day_before_yesterday_closing)
+
+
+price_difference =abs(float(yesterday_data_closing) - float(day_before_yesterday_closing))
+
+
+percentage_difference = (price_difference/float(yesterday_data_closing))*100
+
+if percentage_difference > 4:
+    print("STOCK NEWS!")
+
+
+#sms section where a message will be sent to the user if the stock difference is greater then 4 percent
+
+
+
+
+# Your Twilio credentials (you can get these from your Twilio dashboard)
+account_sid = TWILIO_SID
+auth_token = TWILIO_AUTH
+
+# Create an instance of the Twilio Client
+client = Client(account_sid, auth_token)
+
+# Send the SMS
+message = client.messages.create(
+    body=f'Hello there is a Tesla Stock news. The stock price difference between is {percentage_difference}',  # Message content
+    from_='+12314327312',  # Your Twilio phone number (must be in E.164 format)
+    to='+14389310083'  # The recipient's phone number (also in E.164 format)
+)
+
+# Print the message SID to confirm it's been sent
+print(f'Message sent with SID: {message.sid}')
